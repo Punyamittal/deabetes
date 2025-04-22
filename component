@@ -1,0 +1,208 @@
+<div id="webcrumbs"> 
+        	<div className="w-[1000px] bg-gradient-to-b from-primary-50 to-white rounded-xl shadow-xl p-8 font-sans transition-all duration-500 hover:shadow-2xl">
+	  <div className="text-center mb-8 animate-fade-in">
+	    <h1 className="text-3xl font-bold text-primary-800 mb-2 flex items-center justify-center">
+	  <span className="material-symbols-outlined mr-2 text-primary-600 animate-pulse-subtle">
+	    medical_services
+	  </span>
+	  Diabetes Risk Predictor
+	  <span className="material-symbols-outlined ml-2 text-primary-600 animate-pulse-subtle">
+	    monitoring
+	  </span>
+	</h1>
+	    <p className="text-gray-600 max-w-2xl mx-auto animate-fade-in-slow">Enter your health information below to assess your diabetes risk using our predictive model.</p>
+	  </div>
+	
+	  <div className="bg-white rounded-lg shadow-md p-6 mb-8 transition-all duration-500 hover:shadow-lg hover:scale-[1.01] transform">
+	
+	<style  dangerouslySetInnerHTML={{__html: `
+	  @keyframes bounce-subtle {
+	    0%, 100% { transform: translateY(0); }
+	    50% { transform: translateY(-5px); }
+	  }
+	  @keyframes fade-in {
+	    from { opacity: 0; }
+	    to { opacity: 1; }
+	  }
+	  @keyframes fade-in-slow {
+	    0% { opacity: 0; }
+	    100% { opacity: 1; }
+	  }
+	  @keyframes fade-in-up {
+	    0% { opacity: 0; transform: translateY(20px); }
+	    100% { opacity: 1; transform: translateY(0); }
+	  }
+	  @keyframes stagger-fade {
+	    0% { opacity: 0; transform: translateY(10px); }
+	    100% { opacity: 1; transform: translateY(0); }
+	  }
+	  @keyframes pulse-subtle {
+	    0%, 100% { transform: scale(1); }
+	    50% { transform: scale(1.05); }
+	  }
+	  @keyframes fade-in-out {
+	    0%, 100% { opacity: 0.8; }
+	    50% { opacity: 1; }
+	  }
+	  .animate-bounce-subtle {
+	    animation: bounce-subtle 2s ease-in-out infinite;
+	  }
+	  .animate-fade-in {
+	    animation: fade-in 0.5s ease-out forwards;
+	  }
+	  .animate-fade-in-slow {
+	    animation: fade-in-slow 1s ease-out forwards;
+	  }
+	  .animate-fade-in-up {
+	    animation: fade-in-up 0.7s ease-out forwards;
+	  }
+	  .animate-stagger-fade > * {
+	    animation: stagger-fade 0.5s ease-out forwards;
+	    opacity: 0;
+	  }
+	  .animate-stagger-fade > *:nth-child(1) { animation-delay: 0.1s; }
+	  .animate-stagger-fade > *:nth-child(2) { animation-delay: 0.2s; }
+	  .animate-stagger-fade > *:nth-child(3) { animation-delay: 0.3s; }
+	  .animate-stagger-fade > *:nth-child(4) { animation-delay: 0.4s; }
+	  .animate-stagger-fade > *:nth-child(5) { animation-delay: 0.5s; }
+	  .animate-stagger-fade > *:nth-child(6) { animation-delay: 0.6s; }
+	  .animate-stagger-fade > *:nth-child(7) { animation-delay: 0.7s; }
+	  .animate-stagger-fade > *:nth-child(8) { animation-delay: 0.8s; }
+	  .animate-pulse-subtle {
+	    animation: pulse-subtle 3s ease-in-out infinite;
+	  }
+	  .animate-fade-in-out {
+	    animation: fade-in-out 2s ease-in-out infinite;
+	  }
+	`}}></style>
+	    <h2 className="text-xl font-semibold text-primary-700 mb-4 border-b border-primary-200 pb-2">
+	      Health Parameters
+	      
+	    </h2>
+	
+	    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-stagger-fade">
+	      <div className="space-y-1">
+	        <label htmlFor="pregnancies" className="block text-sm font-medium text-gray-700">Pregnancies</label>
+	        <input 
+	  type="number" 
+	  id="pregnancies" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="Number of pregnancies" 
+	        />
+	      </div>
+	
+	      <div className="space-y-1">
+	        <label htmlFor="glucose" className="block text-sm font-medium text-gray-700">Glucose (mg/dL)</label>
+	        <input 
+	  type="number" 
+	  id="glucose" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="Plasma glucose concentration" 
+	        />
+	      </div>
+	
+	      <div className="space-y-1">
+	        <label htmlFor="bloodPressure" className="block text-sm font-medium text-gray-700">Blood Pressure (mm Hg)</label>
+	        <input 
+	  type="number" 
+	  id="bloodPressure" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="Diastolic blood pressure" 
+	        />
+	      </div>
+	
+	      <div className="space-y-1">
+	        <label htmlFor="skinThickness" className="block text-sm font-medium text-gray-700">Skin Thickness (mm)</label>
+	        <input 
+	  type="number" 
+	  id="skinThickness" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="Triceps skin fold thickness" 
+	        />
+	      </div>
+	
+	      <div className="space-y-1">
+	        <label htmlFor="insulin" className="block text-sm font-medium text-gray-700">Insulin (μU/ml)</label>
+	        <input 
+	  type="number" 
+	  id="insulin" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="2-Hour serum insulin" 
+	        />
+	      </div>
+	
+	      <div className="space-y-1">
+	        <label htmlFor="bmi" className="block text-sm font-medium text-gray-700">BMI (kg/m²)</label>
+	        <input 
+	  type="number" 
+	  id="bmi" 
+	  step="0.1" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="Body mass index" 
+	        />
+	      </div>
+	
+	      <div className="space-y-1">
+	        <label htmlFor="dpf" className="block text-sm font-medium text-gray-700">Diabetes Pedigree Function</label>
+	        <input 
+	  type="number" 
+	  id="dpf" 
+	  step="0.001" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="Diabetes pedigree function" 
+	        />
+	      </div>
+	
+	      <div className="space-y-1">
+	        <label htmlFor="age" className="block text-sm font-medium text-gray-700">Age (years)</label>
+	        <input 
+	  type="number" 
+	  id="age" 
+	  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 hover:border-primary-400 transform hover:translate-y-[-2px]"
+	  placeholder="Age in years" 
+	        />
+	      </div>
+	    </div>
+	
+	    <div className="mt-8 text-center animate-fade-in-up">
+	      <button 
+	  className="px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-110 active:scale-95 hover:shadow-lg"
+	  type="submit"
+	      >
+	        Predict Diabetes Risk
+	        <span className="material-symbols-outlined ml-2 align-text-bottom animate-pulse">analytics</span>
+	      </button>
+	    </div>
+	  </div>
+	
+	  <div className="bg-white rounded-lg shadow-md p-6 mb-6 transition-all duration-300 hover:shadow-lg">
+	    <h2  className="text-xl font-semibold text-primary-700 mb-4 border-b border-primary-200 pb-2">
+	      Prediction Results
+	      {/* Next: "Add a prediction history section" */}
+	    </h2>
+	    
+	    <div className="flex flex-col items-center justify-center py-8">
+	      <div className="w-48 h-48 rounded-full border-8 border-gray-200 flex items-center justify-center mb-4 relative transition-all duration-500 hover:border-primary-200 animate-pulse-subtle">
+	        <div className="text-center animate-fade-in-out">
+	          <span className="text-3xl font-bold text-gray-400">Awaiting</span>
+	          <p className="text-sm text-gray-500 mt-1">Input Data</p>
+	        </div>
+	        <div className="absolute inset-0 rounded-full border-8 border-transparent border-t-primary-500 animate-spin"></div>
+	      </div>
+	      
+	      <p className="text-gray-600 max-w-md text-center mt-4 animate-fade-in-slow transition-all duration-300 hover:text-primary-600">
+	        Complete the form above and click "Predict" to receive your diabetes risk assessment.
+	      </p>
+	    </div>
+	  </div>
+	  
+	  <div className="text-center text-sm text-gray-600 animate-fade-in">
+	    <p className="transition-all duration-300 hover:text-primary-600">This tool is for informational purposes only and should not replace professional medical advice.</p>
+	    <p className="mt-1 hover:text-primary-600 transition-colors duration-300 cursor-pointer transform hover:translate-y-[-2px]">
+	      <span className="material-symbols-outlined align-text-bottom text-xs mr-1 animate-bounce-subtle">info</span>
+	      Learn more about diabetes risk factors
+	      {/* Next: "Add a FAQ section about the predictor model" */}
+	    </p>
+	  </div>
+	</div> 
+        </div>

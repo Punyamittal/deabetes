@@ -2,7 +2,10 @@ import React, { useState, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import '../styles/DiabetesPredictor.css';
 
-const API_URL = 'http://localhost:5000/api/predict';
+// Dynamically determine API URL based on environment
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? '/api/predict'  // In production (Vercel), use relative path
+  : 'http://localhost:5000/api/predict';  // In development, use localhost
 
 // Field validation constraints
 const FIELD_CONSTRAINTS = {
