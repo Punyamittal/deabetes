@@ -1,0 +1,27 @@
+2025-04-22 19:16:32,751 - __main__ - INFO - Training new model...
+2025-04-22 19:16:36,024 - __main__ - INFO - New model saved to diabetes_model.joblib
+2025-04-22 19:16:36,032 - __main__ - INFO - Starting Diabetes Prediction API on port 5000
+2025-04-22 19:16:37,425 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.20.136.52:5000
+2025-04-22 19:16:37,425 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-22 19:21:04,821 - __main__ - INFO - Loading existing model from diabetes_model.joblib
+2025-04-22 19:21:04,867 - __main__ - INFO - Starting Diabetes Prediction API on port 5000
+2025-04-22 19:21:06,171 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.20.136.52:5000
+2025-04-22 19:21:06,171 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-22 19:23:29,779 - __main__ - INFO - Loading existing model from diabetes_model.joblib
+2025-04-22 19:23:29,795 - __main__ - INFO - Starting Diabetes Prediction API on port 5000
+2025-04-22 19:23:31,249 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.20.136.52:5000
+2025-04-22 19:23:31,249 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-22 19:23:31,273 - werkzeug - INFO -  * Restarting with stat
+2025-04-22 19:23:33,410 - __main__ - INFO - Loading existing model from diabetes_model.joblib
+2025-04-22 19:23:33,428 - __main__ - INFO - Starting Diabetes Prediction API on port 5000
+2025-04-22 19:23:33,442 - werkzeug - WARNING -  * Debugger is active!
+2025-04-22 19:23:33,442 - werkzeug - INFO -  * Debugger PIN: 103-522-445

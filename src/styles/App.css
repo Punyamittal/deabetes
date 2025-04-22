@@ -1,0 +1,9 @@
+/* App Container */
+.app-container {
+  min-height: 100vh;
+  background-color: #f5f8fa;
+  font-family: 'Open Sans', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
