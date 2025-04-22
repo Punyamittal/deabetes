@@ -1,10 +1,8 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
 import os
-import sys
 import logging
-import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -44,6 +42,50 @@ def validate_prediction_input(data):
     
     return True, None
 
+def simple_predict(features):
+    """
+    A lightweight prediction function that mimics a diabetes model
+    without requiring scikit-learn or other heavy ML libraries.
+    
+    This is based on simple risk factors for Type 2 Diabetes:
+    - High blood glucose
+    - Higher BMI
+    - Age (older adults have higher risk)
+    - Family history (represented by diabetes pedigree function)
+    """
+    # Unpack features
+    pregnancies = features[0]
+    glucose = features[1]
+    blood_pressure = features[2]
+    skin_thickness = features[3]
+    insulin = features[4]
+    bmi = features[5]
+    dpf = features[6]
+    age = features[7]
+    
+    # Normalize values
+    norm_glucose = max(0, min(1, glucose / 200))
+    norm_bmi = max(0, min(1, (bmi - 18.5) / 15))
+    norm_age = max(0, min(1, age / 80))
+    norm_dpf = max(0, min(1, dpf / 1.5))
+    
+    # Weight the factors (these weights approximate general risk factors)
+    # Glucose is heavily weighted as the primary indicator
+    risk_score = (
+        norm_glucose * 0.45 +  # Glucose is the most important factor
+        norm_bmi * 0.25 +      # BMI is another significant factor
+        norm_age * 0.20 +      # Age is a risk factor
+        norm_dpf * 0.10        # Family history affects risk
+    )
+    
+    # Calibrate the prediction threshold
+    is_diabetic = risk_score > 0.5
+    
+    return {
+        'prediction': 'Diabetic' if is_diabetic else 'Not Diabetic',
+        'probability': float(max(0.1, min(0.9, risk_score)))  # Limit between 0.1-0.9
+    }
+
 @app.route('/api/predict', methods=['POST'])
 def predict():
     """API endpoint for making diabetes predictions."""
@@ -59,8 +101,7 @@ def predict():
         if not is_valid:
             return jsonify({'error': error_message}), 400
         
-        # Simplified prediction (mock response for demo)
-        # In a real setup, this would call a ML model
+        # Extract the features
         features = [
             float(data.get('pregnancies', 0)),
             float(data.get('glucose', 0)),
@@ -72,18 +113,8 @@ def predict():
             float(data.get('age', 0))
         ]
         
-        # For demo: higher glucose, age and BMI increase the risk
-        glucose = features[1]
-        bmi = features[5]
-        age = features[7]
-        
-        risk_score = (glucose / 300) * 0.5 + (bmi / 50) * 0.3 + (age / 120) * 0.2
-        is_diabetic = risk_score > 0.5
-        
-        result = {
-            'prediction': 'Diabetic' if is_diabetic else 'Not Diabetic',
-            'probability': min(max(risk_score, 0.1), 0.9)  # Keep between 0.1 and 0.9
-        }
+        # Make prediction using our simple model
+        result = simple_predict(features)
         
         logger.info(f"Prediction result: {result}")
         return jsonify(result)
@@ -97,24 +128,19 @@ def health_check():
     """Simple health check endpoint to verify the API is running."""
     return jsonify({
         'status': 'ok', 
-        'message': 'Diabetes prediction API is running'
+        'message': 'Diabetes prediction API is running (lightweight version)'
     })
-
-@app.route('/api', defaults={'path': ''})
-@app.route('/api/<path:path>')
-def api_catchall(path):
-    """Handle all other API routes"""
-    return jsonify({
-        "status": "error",
-        "message": "Invalid API endpoint", 
-        "path": f"/api/{path}"
-    }), 404
 
 # For Vercel, we need a "catch-all" route
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     """Root catchall handler"""
-    if not path or path.startswith('static'):
-        return "Welcome to the Diabetes Prediction API. Use the React frontend to access the application."
+    if not path:
+        return "Diabetes Prediction API is running. Use the React frontend to access the application."
+    
+    # For API endpoints, handle them all through the main API route
+    if path.startswith('api/'):
+        return jsonify({"error": "Invalid API endpoint"}), 404
+        
     return jsonify({"error": f"Invalid path: /{path}"}), 404 
