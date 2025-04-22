@@ -1,0 +1,16 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="diabetes-prediction-api",
+    version="1.0.0",
+    packages=find_packages(),
+    install_requires=[
+        "flask>=2.0.0,<3.0.0",
+        "flask-cors>=3.0.0,<6.0.0",
+        "numpy>=1.20.0,<2.0.0",
+        "pandas>=1.3.0,<3.0.0",
+        "scikit-learn>=1.0.0,<2.0.0",
+        "joblib>=1.0.0,<2.0.0",
+        "imbalanced-learn>=0.8.0,<0.12.0"
+    ],
+) 

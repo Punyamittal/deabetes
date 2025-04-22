@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
 import os
@@ -18,13 +18,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Set up the path for the model
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '../diabetes_model.joblib')
-
-# Import the DiabetesModel class from a separate file
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '../src/models'))
-from src.models.diabetes_model import DiabetesModel
+# Set up path for imports
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(BASE_DIR, 'diabetes_model.joblib')
+sys.path.append(BASE_DIR)
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -41,41 +38,42 @@ FIELD_CONSTRAINTS = {
     'age': {'min': 0, 'max': 120}
 }
 
-# Request timing decorator
-def timing_decorator(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = f(*args, **kwargs)
-        end_time = time.time()
-        logger.info(f"Request to {f.__name__} took {end_time - start_time:.2f} seconds")
-        return result
-    return wrapper
+# Initialize model
+model = None
+model_loaded = False
 
-# Initialize the model
-model = DiabetesModel()
-
-# Load the model only if it exists
-if os.path.exists(MODEL_PATH):
-    logger.info(f"Loading existing model from {MODEL_PATH}")
+# Try to load the DiabetesModel class
+try:
+    # First try to import from local directory
     try:
-        model.load_model(MODEL_PATH)
-        logger.info("Model loaded successfully")
-    except Exception as e:
-        logger.error(f"Error loading model: {str(e)}")
-else:
-    logger.warning(f"Model file not found at {MODEL_PATH}. Prediction will not work.")
+        from diabetes_model import DiabetesModel
+        logger.info("Imported DiabetesModel from local API directory")
+    except ImportError:
+        # Fall back to the src/models directory
+        sys.path.append(os.path.join(BASE_DIR, 'src/models'))
+        from src.models.diabetes_model import DiabetesModel
+        logger.info("Imported DiabetesModel from src/models directory")
+    
+    # Initialize the model
+    model = DiabetesModel()
+    
+    # Load the model if it exists
+    if os.path.exists(MODEL_PATH):
+        logger.info(f"Loading existing model from {MODEL_PATH}")
+        try:
+            model.load_model(MODEL_PATH)
+            model_loaded = True
+            logger.info("Model loaded successfully")
+        except Exception as e:
+            logger.error(f"Error loading model: {str(e)}")
+    else:
+        logger.warning(f"Model file not found at {MODEL_PATH}")
+except ImportError as e:
+    logger.error(f"Error importing DiabetesModel: {str(e)}")
+
 
 def validate_prediction_input(data):
-    """
-    Validate the input data for a prediction request.
-    
-    Args:
-        data (dict): Input data for prediction
-        
-    Returns:
-        tuple: (is_valid, error_message)
-    """
+    """Validate the input data for a prediction request."""
     # Check if all required fields are present
     required_fields = list(FIELD_CONSTRAINTS.keys())
     for field in required_fields:
@@ -93,31 +91,17 @@ def validate_prediction_input(data):
     
     return True, None
 
+
 @app.route('/api/predict', methods=['POST'])
-@timing_decorator
 def predict():
-    """
-    API endpoint for making diabetes predictions.
-    
-    Expected JSON format:
-    {
-        "pregnancies": 6,
-        "glucose": 148,
-        "bloodPressure": 72,
-        "skinThickness": 35,
-        "insulin": 0,
-        "bmi": 33.6,
-        "dpf": 0.627,
-        "age": 50
-    }
-    
-    Returns:
-    {
-        "prediction": "Diabetic" or "Not Diabetic",
-        "probability": 0.75 (if available)
-    }
-    """
+    """API endpoint for making diabetes predictions."""
     try:
+        # Check if model is loaded
+        if not model_loaded or model is None:
+            return jsonify({
+                'error': 'Model not loaded. Please contact the administrator.'
+            }), 503
+        
         # Get the data from the request
         data = request.get_json()
         
@@ -141,13 +125,8 @@ def predict():
             float(data.get('age', 0))
         ]
         
-        # Check if model is loaded
-        if model.model is None:
-            return jsonify({'error': 'Model not loaded. Please try again later.'}), 500
-        
         # Make prediction
         result = model.predict(features)
-        logger.info(f"Prediction result: {result['prediction']} with probability: {result['probability']}")
         
         return jsonify(result)
     
@@ -158,44 +137,26 @@ def predict():
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """
-    Simple health check endpoint to verify the API is running.
-    """
+    """Simple health check endpoint to verify the API is running."""
     return jsonify({
         'status': 'ok', 
         'message': 'Diabetes prediction API is running',
-        'model_loaded': model.model is not None
+        'model_loaded': model_loaded
     })
 
 
-# Add an error handler for 404 errors
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({'error': 'Endpoint not found'}), 404
-
-
-# Add an error handler for 405 errors
-@app.errorhandler(405)
-def method_not_allowed(error):
-    return jsonify({'error': 'Method not allowed'}), 405
-
-
-# Add an error handler for 500 errors
-@app.errorhandler(500)
-def server_error(error):
-    return jsonify({'error': 'Internal server error'}), 500
-
-
-# This is the required function for Vercel serverless functions
-# It converts Flask responses to Vercel-compatible serverless responses
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    return jsonify({"error": "Invalid endpoint"}), 404
+    """Handle all other routes"""
+    return jsonify({
+        "status": "error",
+        "message": "Invalid endpoint", 
+        "path": path
+    }), 404
 
 
 # For local development
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    logger.info(f"Starting Diabetes Prediction API on port {port}")
     app.run(host='0.0.0.0', port=port, debug=True) 
